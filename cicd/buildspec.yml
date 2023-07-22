@@ -5,12 +5,14 @@ phases:
     runtime-versions:
       python: 3.x
 
-  pre_build:
-    commands:
-      - cd cicd # change directory
-      - chmod +x install-terraform.sh configure-named-profile.sh apply-terraform.sh # make files executable
-      - ./install-terraform.sh # install terraform
-      - ./configure-named-profile.sh # configure named profile
+ pre_build:
+  commands:
+    - cd cicd # change directory
+    - if [ -f install-terraform.sh ] && [ -f configure-named-profile.sh ] && [ -f apply-terraform.sh ]; then chmod +x install-terraform.sh configure-named-profile.sh apply-terraform.sh; else echo "One or more script files do not exist"; exit 1; fi # make files executable only if they exist
+    - ./install-terraform.sh # install terraform
+    - ./configure-named-profile.sh # configure named profile
+    - ./apply-terraform.sh # apply terraform
+
 
   build:
     commands:
